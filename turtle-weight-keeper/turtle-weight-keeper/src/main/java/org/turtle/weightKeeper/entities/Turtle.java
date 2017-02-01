@@ -2,37 +2,36 @@ package org.turtle.weightKeeper.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Set;
 
 /**
  * Created by kanovotn on 1/25/17.
  */
 
 @Entity
-@Table(name = "TURTLE")
-@NamedQuery(name = "findByName", query = "select t from TURTLE where t.name = :tname")
-public class Turtle implements Serializable{
+@NamedQueries({
+        @NamedQuery(name = "findYearByName", query = "select t.yearOfBirth from Turtle t where t.name = :tname"),
+        @NamedQuery(name = "findTurtle", query = "select t from Turtle t where t.name = :tname"),
+})
+public class Turtle implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "YEAR_OF_BIRTH")
-    private Calendar yearOfBirth;
+    private int yearOfBirth;
+
+    // TODO for bidirectional relationship
+    // https://howtoprogramwithjava.com/hibernate-onetomany-bidirectional-relationship/
+    //private Set<TurtleWeight> turtleWeights;
 
     public Turtle() {
-
     }
 
     public Turtle(String name, int yearOfBirth) {
-        Calendar cal = new GregorianCalendar();
-        cal.set(yearOfBirth, 0, 0);
-        this.yearOfBirth = cal;
+        this.yearOfBirth = yearOfBirth;
         this.name = name;
     }
 
@@ -52,11 +51,20 @@ public class Turtle implements Serializable{
         this.name = name;
     }
 
-    public Calendar getYearOfBirth() {
+    public int getYearOfBirth() {
         return yearOfBirth;
     }
 
-    public void setYearOfBirth(Calendar yearOfBirth) {
+    public void setYearOfBirth(int yearOfBirth) {
         this.yearOfBirth = yearOfBirth;
     }
+
+    /*@OneToMany(cascade=CascadeType.ALL, mappedBy="employer")
+    public Set<TurtleWeight> getTurtleWeights() {
+        return turtleWeights;
+    }
+
+    public void setTurtleWeights(Set<TurtleWeight> turtleWeights) {
+        this.turtleWeights = turtleWeights;
+    }*/
 }

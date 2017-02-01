@@ -1,5 +1,7 @@
 package org.turtle.weightKeeper.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -8,25 +10,29 @@ import java.util.Date;
  * Created by kanovotn on 1/25/17.
  */
 @Entity
-@Table(name = "TURTLE_WEIGHT")
-public class TurtleWeight implements Serializable{
+@NamedQueries({
+        @NamedQuery(name = "getRecordsByTurtle", query = "select w from TurtleWeight w where w.turtle = :tturtle"),
+        @NamedQuery(name = "getAllRecords", query = "select w from TurtleWeight w"),
+})
+public class TurtleWeight implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-
-    //@Column(name = "TURTLE_ID")
-    //private int turtleId;
-
-    @Column(name= "DATE")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date date;
-
-    @Column(name= "WEIGHT")
     private int weight;
-
-    @ManyToOne
-    @JoinColumn(name = "TURTLE_ID")
     private Turtle turtle;
+
+    public TurtleWeight() {
+
+    }
+
+    public TurtleWeight(Turtle turtle, Date date, int weight) {
+        this.turtle = turtle;
+        this.date = date;
+        this.weight = weight;
+    }
 
     public int getId() {
         return id;
@@ -35,14 +41,6 @@ public class TurtleWeight implements Serializable{
     public void setId(int id) {
         this.id = id;
     }
-
-   /* public int getTurtleId() {
-        return turtleId;
-    }
-
-    public void setTurtleId(int turtleId) {
-        this.turtleId = turtleId;
-    }*/
 
     public Date getDate() {
         return date;
@@ -60,6 +58,8 @@ public class TurtleWeight implements Serializable{
         this.weight = weight;
     }
 
+    // see https://howtoprogramwithjava.com/hibernate-manytoone-unidirectional-tutorial/
+    @ManyToOne(cascade=CascadeType.ALL)
     public Turtle getTurtle() {
         return turtle;
     }

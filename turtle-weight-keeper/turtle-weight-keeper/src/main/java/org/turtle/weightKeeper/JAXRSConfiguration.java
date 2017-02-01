@@ -1,8 +1,5 @@
 package org.turtle.weightKeeper;
 
-import org.turtle.weightKeeper.ejb.WeightStorageBean;
-
-import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
