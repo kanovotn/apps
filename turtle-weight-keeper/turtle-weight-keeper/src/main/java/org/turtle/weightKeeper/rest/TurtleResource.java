@@ -77,20 +77,20 @@ public class TurtleResource {
     }
 
     @GET
-    @Path("records/{name}")
+    @Path("records")
     @Produces("application/json")
-    public Response getRecordsByName(@PathParam("name") String name) {
+    public Response getRecordsByName(@QueryParam("name") String name) {
         List<TurtleWeight> turtleWeights = turtleBean.getAllRecordsByName(name);
         GenericEntity<List<TurtleWeight>> list = new GenericEntity<List<TurtleWeight>>(turtleWeights) {};
         return Response.ok(list).build();
     }
 
     @GET
-    @Path("allRecords")
+    @Path("records/all")
     @Produces("application/json")
     public Response getRecordsByName() {
         List<TurtleWeight> turtleWeights = turtleBean.getAllRecords();
         GenericEntity<List<TurtleWeight>> list = new GenericEntity<List<TurtleWeight>>(turtleWeights) {};
-        return Response.ok(list).build();
+        return Response.ok(list).build();   
     }*/
 }
