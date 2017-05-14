@@ -10,8 +10,10 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
+        @NamedQuery(name = "getTurtleById", query = "select t from Turtle t where t.id = :tid"),
         @NamedQuery(name = "findYearByName", query = "select t.yearOfBirth from Turtle t where t.name = :tname"),
-        @NamedQuery(name = "findTurtle", query = "select t from Turtle t where t.name = :tname"),
+        @NamedQuery(name = "getTurtleByName", query = "select t from Turtle t where t.name = :tname"),
+        @NamedQuery(name = "getTurtles", query = "select t from Turtle t"),
 })
 public class Turtle implements Serializable {
 

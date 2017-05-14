@@ -28,15 +28,29 @@ public class TurtleBean {
         return turtle;
     }
 
+    public List<Turtle> getAllTurtles() {
+        Query query = em.createNamedQuery("getTurtles", Turtle.class);
+        List<Turtle> turtles = query.getResultList();
+        return  turtles;
+    }
+
+    public List<Turtle> getAllTurtlesByName(String name) {
+        Query query = em.createNamedQuery("getTurtleByName", Turtle.class).setParameter("tname", name);
+        List<Turtle> turtles = query.getResultList();
+        return  turtles;
+    }
+
+    public Turtle getTurtleById(int id) {
+        Query query = em.createNamedQuery("getTurtleById", Turtle.class).setParameter("tid", id);
+        List<Turtle> turtles = query.getResultList();
+        if (turtles.isEmpty()) return null;
+        return turtles.get(0);
+    }
+
+    // ====================================================================================================
     public int getYear(String name) {
         Query query = em.createNamedQuery("findYearByName").setParameter("tname", name);
         return (int) query.getSingleResult();
-    }
-
-    private List<Turtle> getAllTurtlesByName(String name) {
-        Query query = em.createNamedQuery("findTurtle", Turtle.class).setParameter("tname", name);
-        List<Turtle> turtles = query.getResultList();
-        return  turtles;
     }
 
     public TurtleWeight recordWeight(String name, Date date, int weight) {
