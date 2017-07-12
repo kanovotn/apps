@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by kanovotn on 1/25/17.
  */
-@Path("/")
+@Path("/turtles")
 public class TurtleResource {
 
     @Inject
@@ -21,7 +21,6 @@ public class TurtleResource {
 
     // Creates new turtle
     @POST
-    @Path("turtles")
     @Consumes("application/json")
     public Response createTurtle(Turtle turtle, @Context UriInfo uriInfo) {
         Turtle storedTurtle = turtleBean.storeTurtle(turtle);
@@ -33,9 +32,8 @@ public class TurtleResource {
                 .type(MediaType.TEXT_HTML_TYPE).build();
     }
 
-    // Returns all turtles or turtle filtered by name
+    // Returns all turtles or turtle filtered by name or year
     @GET
-    @Path("turtles")
     @Produces("application/json")
     public Response getTurtleByName(@QueryParam("name") String name) {
         List<Turtle> turtles;
@@ -50,7 +48,7 @@ public class TurtleResource {
 
     // Get specific turtle
     @GET
-    @Path("turtles/{id}")
+    @Path("{id}")
     @Produces("application/json")
     public Response getTurtle(@PathParam("id") int id) {
         Turtle turtle = turtleBean.getTurtleById(id);
@@ -60,37 +58,11 @@ public class TurtleResource {
         return Response.ok().entity(turtle).build();
     }
 
-
-    /*@GET
-    @Path("{name}")
-    public String get(@PathParam("name") String name) {
-        int date = turtleBean.getYear(name);
-        return name + ": " + date;
-    }
-
-    @POST
-    @Path("record/{name}/{date}/{weight}")
-    public Response recordWeight(@PathParam("name") String name, @PathParam("date") Date date, @PathParam("weight") int weight) {
-        if (turtleBean.recordWeight(name, date, weight) == null)
-            return Response.ok().entity("Couldn't record weight for turtle " + name + ".\n").type(MediaType.TEXT_HTML_TYPE).build();
-        return Response.ok().entity("Weight of " + weight + " grams of turtle " + name + " recorded.\n").type(MediaType.TEXT_HTML_TYPE).build();
-    }
-
+    // Get records for specific turtle
     @GET
-    @Path("records")
+    @Path("{id}/records")
     @Produces("application/json")
-    public Response getRecordsByName(@QueryParam("name") String name) {
-        List<TurtleWeight> turtleWeights = turtleBean.getAllRecordsByName(name);
-        GenericEntity<List<TurtleWeight>> list = new GenericEntity<List<TurtleWeight>>(turtleWeights) {};
-        return Response.ok(list).build();
+    public RecordsResource getTurtleRecords(@PathParam("id") int id) {
+        return new RecordsResource(id);
     }
-
-    @GET
-    @Path("records/all")
-    @Produces("application/json")
-    public Response getRecordsByName() {
-        List<TurtleWeight> turtleWeights = turtleBean.getAllRecords();
-        GenericEntity<List<TurtleWeight>> list = new GenericEntity<List<TurtleWeight>>(turtleWeights) {};
-        return Response.ok(list).build();   
-    }*/
 }

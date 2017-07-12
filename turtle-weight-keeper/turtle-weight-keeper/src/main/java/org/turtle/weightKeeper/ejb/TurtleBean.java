@@ -13,13 +13,13 @@ import java.util.List;
 /**
  * Created by kanovotn on 1/25/17.
  */
-
 @Stateless
 public class TurtleBean {
 
     @PersistenceContext(name = "turtleDb")
     private EntityManager em;
 
+    // ------------- Turtle methods ------------
     public Turtle storeTurtle(Turtle turtle) {
         List<Turtle> turtles = getAllTurtlesByName(turtle.getName());
         if (turtles.size() != 0)
@@ -46,6 +46,11 @@ public class TurtleBean {
         if (turtles.isEmpty()) return null;
         return turtles.get(0);
     }
+    // ------------- Turtle methods - End -------
+
+    // ------------- Records methods ------------
+    
+    // ------------- Records methods - End ------
 
     // ====================================================================================================
     public int getYear(String name) {

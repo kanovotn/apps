@@ -1,0 +1,8 @@
+# Create turtle
+curl -X POST -H "Content-Type: application/json" -d '{"name":"Oliver","yearOfBirth":"2011"}' http://localhost:8080/turtle-weight-keeper/resources/turtles/
+
+# Get turtle by name
+curl -X GET -H "Accepts: application/json" http://localhost:8080/turtle-weight-keeper/resources/turtles?name=Oliver
+
+# Get turtle by id
+curl -X GET -H "Accepts: application/json" http://localhost:8080/turtle-weight-keeper/resources/turtles/1
