@@ -6,6 +6,7 @@ import org.turtle.weightKeeper.entities.TurtleWeight;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.*;
 import java.util.Date;
 import java.util.List;
@@ -13,11 +14,17 @@ import java.util.List;
 /**
  * Created by kanovotn on 1/25/17.
  */
-@Path("/turtles")
+@Path("/turtle")
 public class TurtleResource {
 
     @Inject
     TurtleBean turtleBean;
+
+    //@Context
+    //private ResourceContext resourceContext;
+
+    @Inject
+    private RecordsResource recordsResource;
 
     // Creates new turtle
     @POST
@@ -42,6 +49,10 @@ public class TurtleResource {
         } else {
             turtles = turtleBean.getAllTurtlesByName(name);
         }
+        if (turtles == null) {
+            return Response.status(404).entity("No turtle with name " + name + " found.").type(MediaType.TEXT_HTML_TYPE).build();
+        }
+
         GenericEntity<List<Turtle>> list = new GenericEntity<List<Turtle>>(turtles) {};
         return Response.ok(list).build();
     }
@@ -59,10 +70,11 @@ public class TurtleResource {
     }
 
     // Get records for specific turtle
-    @GET
     @Path("{id}/records")
-    @Produces("application/json")
     public RecordsResource getTurtleRecords(@PathParam("id") int id) {
-        return new RecordsResource(id);
+        return recordsResource;
+        /*RecordsResource recordsResource = resourceContext.getResource(RecordsResource.class);
+        recordsResource.setTurtleid(id);
+        return recordsResource;*/
     }
 }

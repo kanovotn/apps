@@ -22,7 +22,7 @@ public class TurtleBean {
     // ------------- Turtle methods ------------
     public Turtle storeTurtle(Turtle turtle) {
         List<Turtle> turtles = getAllTurtlesByName(turtle.getName());
-        if (turtles.size() != 0)
+        if (turtles != null)
             return null;
         em.persist(turtle);
         return turtle;
@@ -37,7 +37,8 @@ public class TurtleBean {
     public List<Turtle> getAllTurtlesByName(String name) {
         Query query = em.createNamedQuery("getTurtleByName", Turtle.class).setParameter("tname", name);
         List<Turtle> turtles = query.getResultList();
-        return  turtles;
+        if (turtles.isEmpty()) return null;
+        return turtles;
     }
 
     public Turtle getTurtleById(int id) {
@@ -49,6 +50,18 @@ public class TurtleBean {
     // ------------- Turtle methods - End -------
 
     // ------------- Records methods ------------
+    /*public TurtleWeight createRecord(TurtleWeight turtleWeight) {
+
+    }*/
+
+    public List<TurtleWeight> getRecordsByTurtleId(int id) {
+        Turtle turtle = getTurtleById(id);
+        if (turtle == null)
+            return null;
+        Query query = em.createNamedQuery("getRecordsByTurtle", TurtleWeight.class).setParameter("tturtle", turtle);
+        List<TurtleWeight> turtleWeights = query.getResultList();
+        return turtleWeights;
+    }
     
     // ------------- Records methods - End ------
 

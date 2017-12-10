@@ -3,12 +3,12 @@ package org.turtle.weightKeeper.rest;
 import org.turtle.weightKeeper.ejb.TurtleBean;
 import org.turtle.weightKeeper.entities.TurtleWeight;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -16,24 +16,46 @@ import java.util.List;
  * Created by kanovotn on 1/25/17.
  */
 @Path("records")
+@Stateless
 public class RecordsResource {
 
     @Inject
     TurtleBean turtleBean;
+
+    @PathParam("id")
     int turtleId;
 
-    public RecordsResource() {
+    public void setTurtleid(int id) {
+        this.turtleId = id;
+    }
 
+    public RecordsResource() {
     }
 
     public RecordsResource(int id) {
         this.turtleId = id;
     }
 
+    @POST
+    @Produces("application/json")
+    public Response createRecord() {
+        return Response.ok().build();
+    }
+
+
     @GET
     @Produces("application/json")
     public Response getRecordsById() {
-        return Response.ok().build();
+        List<TurtleWeight> turtleWeights;
+        if (turtleBean == null) System.out.println("TurtleBEAN is null!");
+        else System.out.println("TurtleBEAN is not null!");
+
+        turtleWeights = turtleBean.getRecordsByTurtleId(this.turtleId);
+        if (turtleWeights == null) {
+            return Response.status(404).entity("No records for turtle with id " + this.turtleId + " found.").type(MediaType.TEXT_HTML_TYPE).build();
+        }
+        GenericEntity<List<TurtleWeight>> list = new GenericEntity<List<TurtleWeight>>(turtleWeights) {};
+        return Response.ok(list).build();
     }
 
     /*@GET
